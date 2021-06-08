@@ -15,7 +15,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
-    // РОХЕР ПРИВЕТ
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,20 +41,40 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
 
     }
-    
-    
-    @IBAction func loginButtonPressed(_ sender: UIButton) {
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         let login = loginTextField.text!
         // Получаем текст-пароль
         let password = passwordTextField.text!
         
         // Проверяем, верны ли они
-        if login == "admin" && password == "123456" {
+        if login == "1" && password == "1" {
             print("успешная авторизация")
+            return true
         } else {
             print("неуспешная авторизация")
+            showAlertError()
+            return false
         }
-
+    }
+    private func showAlertError(){
+        let alert = UIAlertController(title: "Ошибка", message: "Введены неверные логин или пароль", preferredStyle: .alert)
+        
+        let loyaltyAction = UIAlertAction(title: "Исправлюсь", style: .cancel, handler: nil)
+        let action = UIAlertAction(title: "Ok", style: .default){_ in
+            self.loginTextField.text = ""
+            self.passwordTextField.text = ""
+            print("Action tapped")
+        }
+        
+        alert.addAction(loyaltyAction)
+        alert.addAction(action)
+        self.present(alert, animated: true){
+            print("Alert Closed")
+        }
+    }
+    
+    
+    @IBAction func loginButtonPressed(_ sender: UIButton) {
     }
     
     @objc func hideKeyboard() {
